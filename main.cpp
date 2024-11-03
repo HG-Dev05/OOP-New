@@ -4,7 +4,10 @@
 #include "MovieManager.h" // Thêm header cho MovieManager
 #include <string>
 #include "Utils.h" 
-
+// new 
+void huhu(){
+    
+}
 void displayMainMenu() {
     int width = 40; // Chiều rộng của menu
     drawBorder(width);
