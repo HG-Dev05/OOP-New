@@ -84,6 +84,18 @@ void User::viewMovies() {
             if (historyFile) {
                 historyFile << selectedMovie << std::endl; // Ghi tên phim vào lịch sử
             }
+
+            // Cho phép người dùng bình luận
+            std::string feedback;
+            std::cout << "Nhap phan hoi ve phim: ";
+            std::cin.ignore(); // Để bỏ qua ký tự newline còn lại
+            std::getline(std::cin, feedback);
+
+            // Lưu phản hồi vào file
+            std::ofstream feedbackFile(selectedMovie + "_feedback.txt", std::ios::app);
+            if (feedbackFile) {
+                feedbackFile << username << ": " << feedback << std::endl; // Ghi phản hồi
+            }
         } else {
             std::cout << "Lua chon khong hop le!" << std::endl;
         }

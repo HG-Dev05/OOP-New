@@ -2,12 +2,10 @@
 #include "UserAuth.h" // Thêm header cho User
 #include "Admin.h" // Thêm header cho Admin
 #include "MovieManager.h" // Thêm header cho MovieManager
+#include "CustomerSupport.h" // Thêm header cho CustomerSupport
 #include <string>
 #include "Utils.h" 
-// new 
-void huhu(){
-    
-}
+
 void displayMainMenu() {
     int width = 40; // Chiều rộng của menu
     drawBorder(width);
@@ -18,7 +16,8 @@ void displayMainMenu() {
     std::cout << "** 1. Dang ky                         **\n";
     std::cout << "** 2. Dang nhap                       **\n";
     std::cout << "** 3. Dang nhap Admin                 **\n";
-    std::cout << "** 4. Thoat                           **\n";
+    std::cout << "** 4. Chăm sóc khách hàng             **\n";
+    std::cout << "** 5. Thoat                           **\n";
     drawBorder(width);
     std::cout << "Nhap tuy chon: ";
 }
@@ -47,10 +46,23 @@ void displayAdminMenu() {
     std::cout << "Nhap tuy chon: ";
 }
 
+void displayCustomerSupportMenu() {
+    int width = 40; // Chiều rộng của menu
+    drawBorder(width);
+    std::cout << "**        MENU CHAM SOC KHACH HANG    **\n";
+    drawBorder(width);
+    std::cout << "** 1. Doc phan hoi khach hang          **\n";
+    std::cout << "** 2. Thong ke the loai phim           **\n";
+    std::cout << "** 3. Thoat                            **\n";
+    drawBorder(width);
+    std::cout << "Nhap tuy chon: ";
+}
+
 int main() {
     int choice;
     User user("", ""); // Khoi tao doi tuong User
     Admin admin; // Khoi tao doi tuong Admin
+    CustomerSupport customerSupport; // Khoi tao doi tuong CustomerSupport
 
     do {
         displayMainMenu(); // Hiển thị menu chính
@@ -107,12 +119,35 @@ int main() {
                 }
                 break;
             case 4:
+                if (customerSupport.loginCustomerSupport()) {
+                    int supportChoice;
+                    do {
+                        displayCustomerSupportMenu(); // Hiển thị menu chăm sóc khách hàng
+                        std::cin >> supportChoice;
+
+                        switch (supportChoice) {
+                            case 1:
+                                customerSupport.readCustomerFeedback();
+                                break;
+                            case 2:
+                                customerSupport.statistics();
+                                break;
+                            case 3:
+                                std::cout << "Thoat chuc nang cham soc khach hang." << std::endl;
+                                break;
+                            default:
+                                std::cout << "Lua chon khong hop le!" << std::endl;
+                        }
+                    } while (supportChoice != 3);
+                }
+                break;
+            case 5:
                 std::cout << "Thoat chuong trinh." << std::endl;
                 break;
             default:
                 std::cout << "Lua chon khong hop le!" << std::endl;
         }
-    } while (choice != 4);
+    } while (choice != 5);
 
     return 0;
 }
