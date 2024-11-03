@@ -1,7 +1,9 @@
 #include "CustomerSupport.h"
 
 // Định nghĩa hàm khởi tạo
-CustomerSupport::CustomerSupport() {}
+CustomerSupport::CustomerSupport() {
+    movieManager.initializeViewCounts(); // Gọi phương thức khởi tạo
+}
 
 
 // Hàm đăng nhập cho tài khoản chăm sóc khách hàng
@@ -79,19 +81,14 @@ void CustomerSupport::readCustomerFeedback() {
 
 // Định nghĩa hàm statistics
 void CustomerSupport::statistics() {
-    std::string movieName;
-    std::cout << "Nhap ten phim de xem thong ke phan hoi: ";
-    std::cin >> movieName;
-
-    std::ifstream feedbackFile(movieName + "_feedback.txt");
-    if (feedbackFile) {
+    std::ifstream viewCountFile("view_counts.txt");
+    if (viewCountFile) {
         std::string line;
-        std::cout << "Thong ke phan hoi cho phim " << movieName << ":\n";
-        while (std::getline(feedbackFile, line)) {
-            std::cout << "- " << line << std::endl; // In ra từng bình luận
+        std::cout << "Thong ke so luot xem cho tung phim:\n";
+        while (std::getline(viewCountFile, line)) {
+            std::cout << line << std::endl; // In ra số lượt xem cho từng phim
         }
     } else {
-        std::cerr << "Khong the mo file phan hoi cho phim " << movieName << "!" << std::endl;
+        std::cerr << "Khong the mo file thong ke so luot xem!" << std::endl;
     }
 }
-

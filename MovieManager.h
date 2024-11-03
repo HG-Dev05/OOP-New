@@ -14,6 +14,8 @@ public:
     std::vector<std::string> getGenres();
     void viewAllMovies();
     std::vector<std::string> getMoviesByGenre(const std::string& genre);
+
+    void initializeViewCounts();
 };
 
 #endif // MOVIE_MANAGER_H

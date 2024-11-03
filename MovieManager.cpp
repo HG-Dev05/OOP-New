@@ -130,3 +130,21 @@ void MovieManager::updateMovie(const std::string& oldName, const std::string& ne
         std::cout << "Khong tim thay phim: " << oldName << std::endl;
     }
 }
+
+void MovieManager::initializeViewCounts() {
+    std::ifstream genreFile("TheLoaiPhim.txt");
+    std::ofstream viewCountFile("view_counts.txt");
+
+    if (genreFile && viewCountFile) {
+        std::string genre;
+        while (std::getline(genreFile, genre)) {
+            std::vector<std::string> movies = getMoviesByGenre(genre); // Lấy danh sách phim theo thể loại
+            for (const auto& movie : movies) {
+                viewCountFile << movie << ": 0" << std::endl; // Ghi tên phim và số lượt xem ban đầu là 0
+            }
+        }
+        std::cout << "Da khoi tao so luot xem cho tat ca phim!" << std::endl;
+    } else {
+        std::cerr << "Khong the mo file de khoi tao!" << std::endl;
+    }
+}

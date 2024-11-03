@@ -1,6 +1,8 @@
 #include <iostream>
 #include <fstream>
+#include <map>
 #include "UserAuth.h"
+#include <map> 
 
 User::User(std::string user, std::string pass) : username(user), password(pass) {}
 
@@ -78,6 +80,32 @@ void User::viewMovies() {
         if (movieChoice > 0 && movieChoice <= movies.size()) {
             std::string selectedMovie = movies[movieChoice - 1];
             std::cout << "Dang xem phim: " << selectedMovie << std::endl;
+
+            // Cập nhật số lượt xem
+            std::ifstream viewCountFile("view_counts.txt");
+            std::map<std::string, int> viewCounts;
+            std::string line;
+
+            // Đọc số lượt xem từ file
+            while (std::getline(viewCountFile, line)) {
+                size_t pos = line.find(":");
+                if (pos != std::string::npos) {
+                    std::string movieName = line.substr(0, pos);
+                    int count = std::stoi(line.substr(pos + 1));
+                    viewCounts[movieName] = count;
+                }
+            }
+            viewCountFile.close();
+
+            // Tăng số lượt xem lên 1
+            viewCounts[selectedMovie]++;
+
+            // Ghi lại số lượt xem vào file
+            std::ofstream outputFile("view_counts.txt");
+            for (const auto& entry : viewCounts) {
+                outputFile << entry.first << ": " << entry.second << std::endl;
+            }
+            outputFile.close();
 
             // Ghi vào lịch sử xem phim
             std::ofstream historyFile(username + "_history.txt", std::ios::app);
