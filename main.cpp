@@ -16,7 +16,7 @@ void displayMainMenu() {
     std::cout << "** 1. Dang ky                         **\n";
     std::cout << "** 2. Dang nhap                       **\n";
     std::cout << "** 3. Dang nhap Admin                 **\n";
-    std::cout << "** 4. Chăm sóc khách hàng             **\n";
+    std::cout << "** 4. Cham soc khach hang             **\n";
     std::cout << "** 5. Thoat                           **\n";
     drawBorder(width);
     std::cout << "Nhap tuy chon: ";
@@ -90,9 +90,11 @@ int main() {
                                 std::cout << "Thoat chuc nang nguoi dung." << std::endl;
                                 break;
                             default:
-                                std::cout << "Lua chon khong hop le!" << std::endl;
+                                std::cout << "Lua chon khong hop le! Vui long chon lai." << std::endl;
                         }
                     } while (userChoice != 3);
+                } else {
+                    std::cout << "Dang nhap khong thanh cong!" << std::endl;
                 }
                 break;
             case 3:
@@ -113,9 +115,11 @@ int main() {
                                 std::cout << "Thoat chuc nang quan ly admin." << std::endl;
                                 break;
                             default:
-                                std::cout << "Lua chon khong hop le!" << std::endl;
+                                std::cout << "Lua chon khong hop le! Vui long chon lai." << std::endl;
                         }
                     } while (adminChoice != 3);
+                } else {
+                    std::cout << "Dang nhap admin khong thanh cong!" << std::endl;
                 }
                 break;
             case 4:
@@ -136,16 +140,18 @@ int main() {
                                 std::cout << "Thoat chuc nang cham soc khach hang." << std::endl;
                                 break;
                             default:
-                                std::cout << "Lua chon khong hop le!" << std::endl;
+                                std::cout << "Lua chon khong hop le! Vui long chon lai." << std::endl;
                         }
                     } while (supportChoice != 3);
+                } else {
+                    std::cout << "Dang nhap cham soc khach hang khong thanh cong!" << std::endl;
                 }
                 break;
             case 5:
                 std::cout << "Thoat chuong trinh." << std::endl;
                 break;
             default:
-                std::cout << "Lua chon khong hop le!" << std::endl;
+                std::cout << "Lua chon khong hop le! Vui long chon lai." << std::endl;
         }
     } while (choice != 5);
 

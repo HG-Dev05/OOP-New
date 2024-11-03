@@ -67,7 +67,7 @@ void User::viewMovies() {
         std::vector<std::string> movies = movieManager.getMoviesByGenre(selectedGenre);
         std::cout << "Danh sach phim trong the loai " << selectedGenre << ":\n";
         for (size_t i = 0; i < movies.size(); ++i) {
-            std::cout << movies[i] << std::endl;
+            std::cout << i + 1 << ". " << movies[i] << std::endl;
         }
 
         // Cho phép người dùng chọn phim
@@ -85,17 +85,41 @@ void User::viewMovies() {
                 historyFile << selectedMovie << std::endl; // Ghi tên phim vào lịch sử
             }
 
-            // Cho phép người dùng bình luận
-            std::string feedback;
-            std::cout << "Nhap phan hoi ve phim: ";
-            std::cin.ignore(); // Để bỏ qua ký tự newline còn lại
-            std::getline(std::cin, feedback);
+            // Tùy chọn cho người dùng
+            int actionChoice;
+            do {
+                std::cout << "Chon hanh dong:\n1. Dung phim\n2. Them binh luan\n3. Thoat\n";
+                std::cout << "Nhap so: ";
+                std::cin >> actionChoice;
 
-            // Lưu phản hồi vào file
-            std::ofstream feedbackFile(selectedMovie + "_feedback.txt", std::ios::app);
-            if (feedbackFile) {
-                feedbackFile << username << ": " << feedback << std::endl; // Ghi phản hồi
-            }
+                switch (actionChoice) {
+                    case 1:
+                        std::cout << "Phim da duoc dung!" << std::endl;
+                        break;
+                    case 2: {
+                        // Cho phép người dùng bình luận
+                        std::string feedback;
+                        std::cout << "Nhap phan hoi ve phim: ";
+                        std::cin.ignore(); // Để bỏ qua ký tự newline còn lại
+                        std::getline(std::cin, feedback);
+
+                        // Lưu phản hồi vào file
+                        std::ofstream feedbackFile(selectedMovie + "_feedback.txt", std::ios::app);
+                        if (feedbackFile) {
+                            feedbackFile << username << ": " << feedback << std::endl; // Ghi phản hồi
+                            std::cout << "Binh luan da duoc luu!" << std::endl;
+                        } else {
+                            std::cerr << "Khong the mo file de ghi phan hoi!" << std::endl;
+                        }
+                        break;
+                    }
+                    case 3:
+                        std::cout << "Thoat khoi chuc nang xem phim." << std::endl;
+                        break;
+                    default:
+                        std::cout << "Lua chon khong hop le!" << std::endl;
+                }
+            } while (actionChoice != 3);
         } else {
             std::cout << "Lua chon khong hop le!" << std::endl;
         }

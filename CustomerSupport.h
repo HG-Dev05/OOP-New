@@ -5,17 +5,17 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include "MovieManager.h"
 
 class CustomerSupport {
 public:
     CustomerSupport();
     bool loginCustomerSupport();
     void readCustomerFeedback();
-    void readFeedbackByMovie(const std::string& movieName);
-    void loadFeedbacks();
+    void statistics();
 
 private:
-    std::vector<std::string> feedbacks;
+    MovieManager movieManager;
 };
 
 #endif // CUSTOMERSUPPORT_H
