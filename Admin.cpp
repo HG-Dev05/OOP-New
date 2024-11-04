@@ -318,7 +318,7 @@ void Admin::manageUsers() {
 }
 
 void Admin::viewUserActivity(const std::string& username) {
-    std::ifstream inputFile(username + "_activity.txt"); // Giả sử lịch sử xem của người dùng được lưu trong file <username>_activity.txt
+    std::ifstream inputFile(username + "_history.txt"); // Lịch sử xem phim
     if (inputFile) {
         std::string line;
         std::cout << "Lich su xem phim cua nguoi dung " << username << ":\n";
@@ -327,5 +327,17 @@ void Admin::viewUserActivity(const std::string& username) {
         }
     } else {
         std::cerr << "Khong the mo file lich su hoat dong!" << std::endl;
+    }
+
+    // Hiển thị bình luận
+    std::ifstream feedbackFile(username + "_feedback.txt"); // Giả sử bình luận được lưu trong file <username>_feedback.txt
+    if (feedbackFile) {
+        std::string feedbackLine;
+        std::cout << "Binh luan cua nguoi dung " << username << ":\n";
+        while (std::getline(feedbackFile, feedbackLine)) {
+            std::cout << "- " << feedbackLine << std::endl; // In bình luận
+        }
+    } else {
+        std::cerr << "Khong the mo file binh luan!" << std::endl;
     }
 }

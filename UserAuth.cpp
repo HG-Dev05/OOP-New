@@ -3,6 +3,8 @@
 #include <map>
 #include "UserAuth.h"
 #include <map> 
+#include <ctime>
+#include <cstdio>
 
 User::User(std::string user, std::string pass) : username(user), password(pass) {}
 
@@ -79,7 +81,7 @@ void User::viewMovies() {
 
         if (movieChoice > 0 && movieChoice <= movies.size()) {
             std::string selectedMovie = movies[movieChoice - 1];
-            std::cout << "Dang xem phim: " << selectedMovie << std::endl;
+            std::cout << "Dang xem phim: " << selectedMovie <<"......." << std::endl;
 
             // Cập nhật số lượt xem
             std::ifstream viewCountFile("view_counts.txt");
@@ -107,16 +109,25 @@ void User::viewMovies() {
             }
             outputFile.close();
 
-            // Ghi vào lịch sử xem phim
+            // Ghi vào lịch sử xem phim với thời gian
             std::ofstream historyFile(username + "_history.txt", std::ios::app);
             if (historyFile) {
-                historyFile << selectedMovie << std::endl; // Ghi tên phim vào lịch sử
+                // Lấy thời gian hiện tại
+                std::time_t now = std::time(nullptr);
+                std::tm* localTime = std::localtime(&now);
+                historyFile << selectedMovie << " - " 
+                            << (localTime->tm_year + 1900) << "-" 
+                            << (localTime->tm_mon + 1) << "-" 
+                            << localTime->tm_mday << " " 
+                            << localTime->tm_hour << ":" 
+                            << localTime->tm_min << ":" 
+                            << localTime->tm_sec << std::endl; // Ghi tên phim và thời gian
             }
 
             // Tùy chọn cho người dùng
             int actionChoice;
             do {
-                std::cout << "Chon hanh dong:\n1. Dung phim\n2. Them binh luan\n3. Thoat\n";
+                std::cout << "Chon hanh dong:\n1. Dung phim\n2. Them binh luan\n3. Xoa lich su xem phim\n4. Thoat\n";
                 std::cout << "Nhap so: ";
                 std::cin >> actionChoice;
 
@@ -142,12 +153,15 @@ void User::viewMovies() {
                         break;
                     }
                     case 3:
+                        clearWatchHistory(); // Gọi hàm xóa lịch sử xem
+                        break;
+                    case 4:
                         std::cout << "Thoat khoi chuc nang xem phim." << std::endl;
                         break;
                     default:
                         std::cout << "Lua chon khong hop le!" << std::endl;
                 }
-            } while (actionChoice != 3);
+            } while (actionChoice != 4);
         } else {
             std::cout << "Lua chon khong hop le!" << std::endl;
         }
@@ -159,12 +173,21 @@ void User::viewMovies() {
 void User::viewWatchHistory() {
     std::ifstream historyFile(username + "_history.txt");
     if (historyFile) {
-        std::string movieName;
+        std::string line;
         std::cout << "Lich su phim da xem:\n";
-        while (std::getline(historyFile, movieName)) {
-            std::cout << "- " << movieName << std::endl;
+        while (std::getline(historyFile, line)) {
+            std::cout << "- " << line << std::endl; // In lịch sử xem
         }
     } else {
         std::cerr << "Khong the mo file lich su!" << std::endl;
+    }
+}
+
+void User::clearWatchHistory() {
+    std::string historyFileName = username + "_history.txt";
+    if (remove(historyFileName.c_str()) == 0) {
+        std::cout << "Da xoa lich su xem phim!" << std::endl;
+    } else {
+        std::cerr << "Khong the xoa lich su xem phim!" << std::endl;
     }
 }

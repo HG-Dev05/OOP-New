@@ -17,6 +17,7 @@ public:
     bool loginUser();
     void viewMovies(); // Chỉ khai báo, không định nghĩa
     void viewWatchHistory();
+    void clearWatchHistory();
 };
 
 #endif // USER_AUTH_H
