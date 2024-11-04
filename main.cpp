@@ -66,7 +66,12 @@ int main() {
 
     do {
         displayMainMenu(); // Hiển thị menu chính
-        std::cin >> choice;
+        do {
+            std::cin >> choice;
+            if (choice < 1 || choice > 5) {
+                std::cout << "Lua chon khong hop le! Vui long chon lai (1-5): ";
+            }
+        } while (choice < 1 || choice > 5);
 
         switch (choice) {
             case 1:
@@ -152,6 +157,12 @@ int main() {
                 break;
             default:
                 std::cout << "Lua chon khong hop le! Vui long chon lai." << std::endl;
+        }
+
+        if (choice != 5) {  // Không đợi Enter khi thoát chương trình
+            std::cout << "\nNhan Enter de tiep tuc...";
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cin.get();
         }
     } while (choice != 5);
 

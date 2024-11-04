@@ -60,114 +60,121 @@ void User::viewMovies() {
 
     // Cho phép người dùng chọn thể loại
     int genreChoice;
-    std::cout << "Chon the loai phim (nhap so): ";
-    std::cin >> genreChoice;
-
-    if (genreChoice > 0 && genreChoice <= genres.size()) {
-        std::string selectedGenre = genres[genreChoice - 1];
-        std::cout << "Ban da chon the loai: " << selectedGenre << std::endl;
-
-        // Hiển thị danh sách phim theo thể loại
-        std::vector<std::string> movies = movieManager.getMoviesByGenre(selectedGenre);
-        std::cout << "Danh sach phim trong the loai " << selectedGenre << ":\n";
-        for (size_t i = 0; i < movies.size(); ++i) {
-            std::cout << i + 1 << ". " << movies[i] << std::endl;
+    do {
+        std::cout << "Chon the loai phim (nhap so): ";
+        std::cin >> genreChoice;
+        
+        if (genreChoice <= 0 || genreChoice > genres.size()) {
+            std::cout << "Lua chon khong hop le! Vui long chon lai.\n";
         }
+    } while (genreChoice <= 0 || genreChoice > genres.size());
 
-        // Cho phép người dùng chọn phim
-        int movieChoice;
+    std::string selectedGenre = genres[genreChoice - 1];
+    std::cout << "Ban da chon the loai: " << selectedGenre << std::endl;
+
+    // Hiển thị danh sách phim theo thể loại
+    std::vector<std::string> movies = movieManager.getMoviesByGenre(selectedGenre);
+    std::cout << "Danh sach phim trong the loai " << selectedGenre << ":\n";
+    for (size_t i = 0; i < movies.size(); ++i) {
+        std::cout << i + 1 << ". " << movies[i] << std::endl;
+    }
+
+    // Cho phép người dùng chọn phim
+    int movieChoice;
+    do {
         std::cout << "Chon phim de xem (nhap so): ";
         std::cin >> movieChoice;
-
-        if (movieChoice > 0 && movieChoice <= movies.size()) {
-            std::string selectedMovie = movies[movieChoice - 1];
-            std::cout << "Dang xem phim: " << selectedMovie <<"......." << std::endl;
-
-            // Cập nhật số lượt xem
-            std::ifstream viewCountFile("view_counts.txt");
-            std::map<std::string, int> viewCounts;
-            std::string line;
-
-            // Đọc số lượt xem từ file
-            while (std::getline(viewCountFile, line)) {
-                size_t pos = line.find(":");
-                if (pos != std::string::npos) {
-                    std::string movieName = line.substr(0, pos);
-                    int count = std::stoi(line.substr(pos + 1));
-                    viewCounts[movieName] = count;
-                }
-            }
-            viewCountFile.close();
-
-            // Tăng số lượt xem lên 1
-            viewCounts[selectedMovie]++;
-
-            // Ghi lại số lượt xem vào file
-            std::ofstream outputFile("view_counts.txt");
-            for (const auto& entry : viewCounts) {
-                outputFile << entry.first << ": " << entry.second << std::endl;
-            }
-            outputFile.close();
-
-            // Ghi vào lịch sử xem phim với thời gian
-            std::ofstream historyFile(username + "_history.txt", std::ios::app);
-            if (historyFile) {
-                // Lấy thời gian hiện tại
-                std::time_t now = std::time(nullptr);
-                std::tm* localTime = std::localtime(&now);
-                historyFile << selectedMovie << " - " 
-                            << (localTime->tm_year + 1900) << "-" 
-                            << (localTime->tm_mon + 1) << "-" 
-                            << localTime->tm_mday << " " 
-                            << localTime->tm_hour << ":" 
-                            << localTime->tm_min << ":" 
-                            << localTime->tm_sec << std::endl; // Ghi tên phim và thời gian
-            }
-
-            // Tùy chọn cho người dùng
-            int actionChoice;
-            do {
-                std::cout << "Chon hanh dong:\n1. Dung phim\n2. Them binh luan\n3. Xoa lich su xem phim\n4. Thoat\n";
-                std::cout << "Nhap so: ";
-                std::cin >> actionChoice;
-
-                switch (actionChoice) {
-                    case 1:
-                        std::cout << "Phim da duoc dung!" << std::endl;
-                        break;
-                    case 2: {
-                        // Cho phép người dùng bình luận
-                        std::string feedback;
-                        std::cout << "Nhap phan hoi ve phim: ";
-                        std::cin.ignore(); // Để bỏ qua ký tự newline còn lại
-                        std::getline(std::cin, feedback);
-
-                        // Lưu phản hồi vào file
-                        std::ofstream feedbackFile(selectedMovie + "_feedback.txt", std::ios::app);
-                        if (feedbackFile) {
-                            feedbackFile << username << ": " << feedback << std::endl; // Ghi phản hồi
-                            std::cout << "Binh luan da duoc luu!" << std::endl;
-                        } else {
-                            std::cerr << "Khong the mo file de ghi phan hoi!" << std::endl;
-                        }
-                        break;
-                    }
-                    case 3:
-                        clearWatchHistory(); // Gọi hàm xóa lịch sử xem
-                        break;
-                    case 4:
-                        std::cout << "Thoat khoi chuc nang xem phim." << std::endl;
-                        break;
-                    default:
-                        std::cout << "Lua chon khong hop le!" << std::endl;
-                }
-            } while (actionChoice != 4);
-        } else {
-            std::cout << "Lua chon khong hop le!" << std::endl;
+        
+        if (movieChoice <= 0 || movieChoice > movies.size()) {
+            std::cout << "Lua chon khong hop le! Vui long chon lai.\n";
         }
-    } else {
-        std::cout << "Lua chon khong hop le!" << std::endl;
+    } while (movieChoice <= 0 || movieChoice > movies.size());
+
+    std::string selectedMovie = movies[movieChoice - 1];
+    std::cout << "Dang xem phim: " << selectedMovie <<"......." << std::endl;
+
+    // Cập nhật số lượt xem
+    std::ifstream viewCountFile("view_counts.txt");
+    std::map<std::string, int> viewCounts;
+    std::string line;
+
+    // Đọc số lượt xem từ file
+    while (std::getline(viewCountFile, line)) {
+        size_t pos = line.find(":");
+        if (pos != std::string::npos) {
+            std::string movieName = line.substr(0, pos);
+            int count = std::stoi(line.substr(pos + 1));
+            viewCounts[movieName] = count;
+        }
     }
+    viewCountFile.close();
+
+    // Tăng số lượt xem lên 1
+    viewCounts[selectedMovie]++;
+
+    // Ghi lại số lượt xem vào file
+    std::ofstream outputFile("view_counts.txt");
+    for (const auto& entry : viewCounts) {
+        outputFile << entry.first << ": " << entry.second << std::endl;
+    }
+    outputFile.close();
+
+    // Ghi vào lịch sử xem phim với thời gian
+    std::ofstream historyFile(username + "_history.txt", std::ios::app);
+    if (historyFile) {
+        std::time_t now = std::time(nullptr);
+        std::tm* localTime = std::localtime(&now);
+        historyFile << selectedMovie << " - " 
+                    << (localTime->tm_year + 1900) << "-" 
+                    << (localTime->tm_mon + 1) << "-" 
+                    << localTime->tm_mday << " " 
+                    << localTime->tm_hour << ":" 
+                    << localTime->tm_min << std::endl;
+    }
+
+    // Tùy chọn cho người dùng
+    int actionChoice;
+    do {
+        std::cout << "Chon hanh dong:\n1. Dung phim\n2. Them binh luan\n3. Xoa lich su xem phim\n4. Thoat\n";
+        std::cout << "Nhap so: ";
+        std::cin >> actionChoice;
+
+        switch (actionChoice) {
+            case 1:
+                std::cout << "Phim da duoc dung!" << std::endl;
+                break;
+            case 2: {
+                // Cho phép người dùng bình luận
+                std::string feedback;
+                std::cout << "Nhap phan hoi ve phim: ";
+                std::cin.ignore(); // Để bỏ qua ký tự newline còn lại
+                std::getline(std::cin, feedback);
+
+                // Lưu phản hồi vào file
+                std::ofstream feedbackFile(selectedMovie + "_feedback.txt", std::ios::app);
+                if (feedbackFile) {
+                    feedbackFile << username << ": " << feedback << std::endl; // Ghi phản hồi
+                    std::cout << "Binh luan da duoc luu!" << std::endl;
+                } else {
+                    std::cerr << "Khong the mo file de ghi phan hoi!" << std::endl;
+                }
+                break;
+            }
+            case 3:
+                clearWatchHistory(); // Gọi hàm xóa lịch sử xem
+                break;
+            case 4:
+                std::cout << "Thoat khoi chuc nang xem phim." << std::endl;
+                break;
+            default:
+                std::cout << "Lua chon khong hop le!" << std::endl;
+        }
+    } while (actionChoice != 4);
+
+    // Thêm phần đợi nhấn Enter
+    std::cout << "\nNhan Enter de tiep tuc...";
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::cin.get();
 }
 
 void User::viewWatchHistory() {
