@@ -5,6 +5,7 @@
 #include "CustomerSupport.h" // Thêm header cho CustomerSupport
 #include <string>
 #include "Utils.h" 
+#include <limits>
 
 void displayMainMenu() {
     int width = 40; // Chiều rộng của menu
@@ -29,7 +30,8 @@ void displayUserMenu() {
     drawBorder(width);
     std::cout << "** 1. Xem phim                        **\n";
     std::cout << "** 2. Xem lich su phim da xem         **\n";
-    std::cout << "** 3. Thoat                          **\n";
+    std::cout << "** 3. Xoa lich su xem phim            **\n";
+    std::cout << "** 4. Thoat                           **\n";
     drawBorder(width);
     std::cout << "Nhap tuy chon: ";
 }
@@ -92,12 +94,15 @@ int main() {
                                 user.viewWatchHistory();
                                 break;
                             case 3:
+                                user.clearWatchHistory();
+                                break;
+                            case 4:
                                 std::cout << "Thoat chuc nang nguoi dung." << std::endl;
                                 break;
                             default:
                                 std::cout << "Lua chon khong hop le! Vui long chon lai." << std::endl;
                         }
-                    } while (userChoice != 3);
+                    } while (userChoice != 4);
                 } else {
                     std::cout << "Dang nhap khong thanh cong!" << std::endl;
                 }

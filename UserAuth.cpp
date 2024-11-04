@@ -1,10 +1,12 @@
 #include <iostream>
+#include <limits> 
 #include <fstream>
 #include <map>
 #include "UserAuth.h"
 #include <map> 
 #include <ctime>
 #include <cstdio>
+#include <limits>
 
 User::User(std::string user, std::string pass) : username(user), password(pass) {}
 
@@ -135,46 +137,50 @@ void User::viewMovies() {
     // Tùy chọn cho người dùng
     int actionChoice;
     do {
-        std::cout << "Chon hanh dong:\n1. Dung phim\n2. Them binh luan\n3. Xoa lich su xem phim\n4. Thoat\n";
+        std::cout << "Chon hanh dong:\n"
+                  << "1. Dung phim\n"
+                  << "2. Them binh luan\n"
+                  << "3. Thoat\n";
         std::cout << "Nhap so: ";
-        std::cin >> actionChoice;
+        
+        while (!(std::cin >> actionChoice) || actionChoice < 1 || actionChoice > 3) {
+            std::cout << "Lua chon khong hop le! Vui long chon lai (1-3): ";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }
 
         switch (actionChoice) {
-            case 1:
+            case 1: {
                 std::cout << "Phim da duoc dung!" << std::endl;
+                std::cout << "\nNhan Enter de tiep tuc...";
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cin.get();
                 break;
+            }
             case 2: {
-                // Cho phép người dùng bình luận
                 std::string feedback;
                 std::cout << "Nhap phan hoi ve phim: ";
-                std::cin.ignore(); // Để bỏ qua ký tự newline còn lại
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 std::getline(std::cin, feedback);
 
-                // Lưu phản hồi vào file
                 std::ofstream feedbackFile(selectedMovie + "_feedback.txt", std::ios::app);
                 if (feedbackFile) {
-                    feedbackFile << username << ": " << feedback << std::endl; // Ghi phản hồi
+                    feedbackFile << username << ": " << feedback << std::endl;
                     std::cout << "Binh luan da duoc luu!" << std::endl;
                 } else {
                     std::cerr << "Khong the mo file de ghi phan hoi!" << std::endl;
                 }
+                
+                std::cout << "\nNhan Enter de tiep tuc...";
+                std::cin.get();
                 break;
             }
-            case 3:
-                clearWatchHistory(); // Gọi hàm xóa lịch sử xem
-                break;
-            case 4:
+            case 3: {
                 std::cout << "Thoat khoi chuc nang xem phim." << std::endl;
                 break;
-            default:
-                std::cout << "Lua chon khong hop le!" << std::endl;
+            }
         }
-    } while (actionChoice != 4);
-
-    // Thêm phần đợi nhấn Enter
-    std::cout << "\nNhan Enter de tiep tuc...";
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    std::cin.get();
+    } while (actionChoice != 3);
 }
 
 void User::viewWatchHistory() {

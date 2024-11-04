@@ -1,6 +1,7 @@
 #ifndef USER_AUTH_H
 #define USER_AUTH_H
 
+#include <limits>
 #include <string>
 #include <vector>
 #include "MovieManager.h" // Thêm header cho MovieManager
