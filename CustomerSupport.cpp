@@ -1,12 +1,11 @@
 #include "CustomerSupport.h"
 
-// Định nghĩa hàm khởi tạo
+// Constructor - Khởi tạo số lượt xem cho các phim
 CustomerSupport::CustomerSupport() {
-    movieManager.initializeViewCounts(); // Gọi phương thức khởi tạo
+    movieManager.initializeViewCounts();
 }
 
-
-// Hàm đăng nhập cho tài khoản chăm sóc khách hàng
+// Kiểm tra thông tin đăng nhập CSKH
 bool CustomerSupport::loginCustomerSupport() {
     std::string username, password;
     std::cout << "Nhap ten dang nhap: ";
@@ -18,11 +17,11 @@ bool CustomerSupport::loginCustomerSupport() {
     return (username == "Bin" && password == "123");
 }
 
-// Hàm đọc phản hồi của khách hàng
+// Đọc phản hồi của khách hàng theo thể loại và phim
 void CustomerSupport::readCustomerFeedback() {
     MovieManager movieManager; // Tạo đối tượng MovieManager
 
-    // Đọc danh sách thể loại từ file
+    // Lấy và hiển thị danh sách thể loại
     std::vector<std::string> genres = movieManager.getGenres(); // Sử dụng phương thức getGenres
 
     // Hiển thị danh sách thể loại
@@ -31,7 +30,7 @@ void CustomerSupport::readCustomerFeedback() {
         std::cout << i + 1 << ". " << genres[i] << std::endl;
     }
 
-    // Cho phép người dùng chọn thể loại
+    // Cho phép chọn thể loại và phim để xem phản hồi
     int genreChoice;
     std::cout << "Chon the loai phim (nhap so): ";
     std::cin >> genreChoice;
@@ -79,7 +78,7 @@ void CustomerSupport::readCustomerFeedback() {
     }
 }
 
-// Định nghĩa hàm statistics
+// Thống kê số lượt xem của các phim
 void CustomerSupport::statistics() {
     std::ifstream viewCountFile("view_counts.txt");
     if (viewCountFile) {

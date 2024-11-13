@@ -7,6 +7,7 @@
 #include "Utils.h" 
 #include <limits>
 
+// Hiển thị menu chính của chương trình
 void displayMainMenu() {
     int width = 40; // Chiều rộng của menu
     drawBorder(width);
@@ -23,6 +24,7 @@ void displayMainMenu() {
     std::cout << "Nhap tuy chon: ";
 }
 
+// Hiển thị menu chức năng cho người dùng đã đăng nhập
 void displayUserMenu() {
     int width = 40; // Chiều rộng của menu
     drawBorder(width);
@@ -36,6 +38,7 @@ void displayUserMenu() {
     std::cout << "Nhap tuy chon: ";
 }
 
+// Hiển thị menu quản lý cho admin
 void displayAdminMenu() {
     int width = 40; // Chiều rộng của menu
     drawBorder(width);
@@ -48,6 +51,7 @@ void displayAdminMenu() {
     std::cout << "Nhap tuy chon: ";
 }
 
+// Hiển thị menu chức năng chăm sóc khách hàng
 void displayCustomerSupportMenu() {
     int width = 40; // Chiều rộng của menu
     drawBorder(width);

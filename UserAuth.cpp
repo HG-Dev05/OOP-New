@@ -7,60 +7,141 @@
 #include <ctime>
 #include <cstdio>
 #include <limits>
+#include <sstream>
 
+// Constructor cho class User
 User::User(std::string user, std::string pass) : username(user), password(pass) {}
 
+// Đăng ký tài khoản mới và lưu vào file
 void User::registerUser() {
-    std::cout << "Nhap ten nguoi dung: ";
-    std::cin >> username;
-    std::cout << "Nhap mat khau: ";
-    std::cin >> password;
+    std::cout << "\n=== DANG KY TAI KHOAN ===\n";
 
-    // Ghi thong tin nguoi dung vao file
-    std::ofstream outputFile("users.txt", std::ios::app); // Mo file o che do append
+    // Nhập tên người dùng
+    do {
+        std::cin.ignore();
+        std::cout << "Nhap ten nguoi dung (toi thieu 3 ky tu): ";
+        std::getline(std::cin, username);
+        if (username.length() < 3) {
+            std::cout << "Ten nguoi dung qua ngan! Vui long nhap lai.\n";
+        }
+    } while (username.length() < 3);
+
+    // Nhập mật khẩu
+    do {
+        std::cout << "Nhap mat khau (toi thieu 6 ky tu): ";
+        std::getline(std::cin, password);
+        if (password.length() < 6) {
+            std::cout << "Mat khau qua ngan! Vui long nhap lai.\n";
+        }
+    } while (password.length() < 6);
+
+    // Nhập email
+    do {
+        std::cout << "Nhap email (example@domain.com): ";
+        std::getline(std::cin, email);
+        if (!isValidEmail(email)) {
+            std::cout << "Email khong hop le! Vui long nhap lai.\n";
+        }
+    } while (!isValidEmail(email));
+
+    // Nhập số điện thoại
+    do {
+        std::cout << "Nhap so dien thoai (10 so, bat dau bang so 0): ";
+        std::getline(std::cin, phone);
+        if (!isValidPhone(phone)) {
+            std::cout << "So dien thoai khong hop le! Vui long nhap lai.\n";
+        }
+    } while (!isValidPhone(phone));
+
+    // Nhập địa chỉ
+    do {
+        std::cout << "Nhap dia chi: ";
+        std::getline(std::cin, address);
+        if (address.empty()) {
+            std::cout << "Dia chi khong duoc de trong! Vui long nhap lai.\n";
+        }
+    } while (address.empty());
+
+    // Nhập ngày sinh
+    do {
+        std::cout << "Nhap ngay sinh (dd/mm/yyyy): ";
+        std::getline(std::cin, birthdate);
+        if (!isValidBirthdate(birthdate)) {
+            std::cout << "Ngay sinh khong hop le! Vui long nhap lai.\n";
+        }
+    } while (!isValidBirthdate(birthdate));
+
+    // Ghi thông tin người dùng vào file
+    std::ofstream outputFile("users.txt", std::ios::app);
     if (outputFile) {
-        outputFile << username << " " << password << std::endl;
-        std::cout << "Dang ky thanh cong!" << std::endl;
+        outputFile << "Ten Dang Nhap: " << username << "\n"
+                   << "Mat Khau: " << password << "\n"
+                   << "Email: " << email << "\n"
+                   << "So Dien Thoai: " << phone << "\n"
+                   << "Dia Chi: " << address << "\n"
+                   << "Ngay Sinh: " << birthdate << "\n"
+                   << "------------------------" << std::endl; // Dấu phân cách giữa các người dùng
+        std::cout << "\nDang ky thanh cong!\n";
     } else {
-        std::cerr << "Khong the mo file de ghi!" << std::endl;
+        std::cerr << "Loi: Dang Ky That Bai!\n";
     }
 }
 
+// Kiểm tra thông tin đăng nhập từ file users.txt
 bool User::loginUser() {
-    std::string user, pass;
+    std::string inputUser, inputPass;
+    std::cout << "\n=== DANG NHAP ===\n";
     std::cout << "Nhap ten nguoi dung: ";
-    std::cin >> user;
+    std::cin >> inputUser;
     std::cout << "Nhap mat khau: ";
-    std::cin >> pass;
+    std::cin >> inputPass;
 
-    // Doc thong tin tu file de kiem tra dang nhap
     std::ifstream inputFile("users.txt");
     if (inputFile) {
-        std::string fileUser, filePass;
-        while (inputFile >> fileUser >> filePass) {
-            if (fileUser == user && filePass == pass) {
-                std::cout << "Dang nhap thanh cong!" << std::endl;
-                return true;
+        std::string line;
+        while (std::getline(inputFile, line)) {
+            // Kiểm tra tên đăng nhập
+            if (line.find("Ten Dang Nhap: " + inputUser) != std::string::npos) {
+                // Đọc mật khẩu
+                std::getline(inputFile, line); // Đọc dòng mật khẩu
+                if (line == "Mat Khau: " + inputPass) {
+                    // Nếu mật khẩu đúng, đọc các thông tin khác
+                    std::getline(inputFile, line); // Đọc email
+                    std::getline(inputFile, line); // Đọc số điện thoại
+                    std::getline(inputFile, line); // Đọc địa chỉ
+                    std::getline(inputFile, line); // Đọc ngày sinh
+
+                    // Lưu thông tin vào biến
+                    username = inputUser;
+                    password = inputPass;
+                    // Lưu các thông tin khác nếu cần
+                    std::cout << "\nDang nhap thanh cong!\n";
+                    return true;
+                } else {
+                    std::cout << "\nMat khau khong dung!\n";
+                    return false;
+                }
             }
         }
-        std::cout << "Ten nguoi dung hoac mat khau khong dung!" << std::endl;
+        std::cout << "\nTen nguoi dung khong ton tai!\n";
     } else {
-        std::cerr << "Khong the mo file de doc!" << std::endl;
+        std::cerr << "Loi: Khong the mo file de doc!\n";
     }
     return false;
 }
 
+// Xem và chọn phim để xem
 void User::viewMovies() {
-    // Lấy danh sách thể loại phim
+    // Lấy và hiển thị danh sách thể loại
     std::vector<std::string> genres = movieManager.getGenres();
     
-    // Hiển thị danh sách thể loại
+    // Hiển thị danh sách thể loại cho người dùng chọn
     std::cout << "Danh sach the loai phim:\n";
     for (size_t i = 0; i < genres.size(); ++i) {
         std::cout << i + 1 << ". " << genres[i] << std::endl;
     }
 
-    // Cho phép người dùng chọn thể loại
+    // Cho người dùng chọn thể loại phim
     int genreChoice;
     do {
         std::cout << "Chon the loai phim (nhap so): ";
@@ -74,7 +155,7 @@ void User::viewMovies() {
     std::string selectedGenre = genres[genreChoice - 1];
     std::cout << "Ban da chon the loai: " << selectedGenre << std::endl;
 
-    // Hiển thị danh sách phim theo thể loại
+    // Hiển thị danh sách phim theo thể loại đã chọn
     std::vector<std::string> movies = movieManager.getMoviesByGenre(selectedGenre);
     std::cout << "Danh sach phim trong the loai " << selectedGenre << ":\n";
     for (size_t i = 0; i < movies.size(); ++i) {
@@ -93,9 +174,9 @@ void User::viewMovies() {
     } while (movieChoice <= 0 || movieChoice > movies.size());
 
     std::string selectedMovie = movies[movieChoice - 1];
-    std::cout << "Dang xem phim: " << selectedMovie <<"......." << std::endl;
+    std::cout << "Dang xem phim: " << selectedMovie << "......." << std::endl;
 
-    // Cập nhật số lượt xem
+    // Cập nhật số lượt xem cho phim được chọn
     std::ifstream viewCountFile("view_counts.txt");
     std::map<std::string, int> viewCounts;
     std::string line;
@@ -121,7 +202,7 @@ void User::viewMovies() {
     }
     outputFile.close();
 
-    // Ghi vào lịch sử xem phim với thời gian
+    // Ghi lịch sử xem phim với timestamp
     std::ofstream historyFile(username + "_history.txt", std::ios::app);
     if (historyFile) {
         std::time_t now = std::time(nullptr);
@@ -134,7 +215,7 @@ void User::viewMovies() {
                     << localTime->tm_min << std::endl;
     }
 
-    // Tùy chọn cho người dùng
+    // Xử lý các tùy chọn sau khi xem phim (dừng/bình luận)
     int actionChoice;
     do {
         std::cout << "Chon hanh dong:\n"
@@ -183,6 +264,7 @@ void User::viewMovies() {
     } while (actionChoice != 3);
 }
 
+// Xem lịch sử các phim đã xem
 void User::viewWatchHistory() {
     std::ifstream historyFile(username + "_history.txt");
     if (historyFile) {
@@ -196,6 +278,7 @@ void User::viewWatchHistory() {
     }
 }
 
+// Xóa toàn bộ lịch sử xem phim
 void User::clearWatchHistory() {
     std::string historyFileName = username + "_history.txt";
     if (remove(historyFileName.c_str()) == 0) {
@@ -203,4 +286,55 @@ void User::clearWatchHistory() {
     } else {
         std::cerr << "Khong the xoa lich su xem phim!" << std::endl;
     }
+}
+
+// Thêm các hàm kiểm tra tính hợp lệ
+bool User::isValidEmail(const std::string& email) {
+    // Kiểm tra email có chứa @ và .
+    return email.find('@') != std::string::npos && 
+           email.find('.') != std::string::npos &&
+           email.find('@') < email.find_last_of('.');
+}
+
+bool User::isValidPhone(const std::string& phone) {
+    // Kiểm tra số điện thoại có 10 số và bắt đầu bằng 0
+    if (phone.length() != 10 || phone[0] != '0') return false;
+    for (char c : phone) {
+        if (!isdigit(c)) return false;
+    }
+    return true;
+}
+
+bool User::isValidBirthdate(const std::string& birthdate) {
+    // Kiểm tra định dạng dd/mm/yyyy
+    if (birthdate.length() != 10) return false;
+    if (birthdate[2] != '/' || birthdate[5] != '/') return false;
+
+    try {
+        int day = std::stoi(birthdate.substr(0, 2));
+        int month = std::stoi(birthdate.substr(3, 2));
+        int year = std::stoi(birthdate.substr(6, 4));
+
+        if (year < 1900 || year > 2024) return false;
+        if (month < 1 || month > 12) return false;
+        if (day < 1 || day > 31) return false;
+
+        // Kiểm tra tháng 2 và năm nhuận
+        if (month == 2) {
+            bool isLeapYear = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+            if (day > (isLeapYear ? 29 : 28)) return false;
+        }
+
+        // Kiểm tra các tháng có 30 ngày
+        if ((month == 4 || month == 6 || month == 9 || month == 11) && day > 30) return false;
+
+        return true;
+    } catch (...) {
+        return false;
+    }
+}
+
+void User::clearInputBuffer() {
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }

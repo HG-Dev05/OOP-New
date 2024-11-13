@@ -4,6 +4,7 @@
 #include "Utils.h" 
 
 
+// Kiểm tra thông tin đăng nhập admin
 bool Admin::loginAdmin() {
     std::string user, pass;
     std::cout << "Nhap ten admin: ";
@@ -20,19 +21,30 @@ bool Admin::loginAdmin() {
     }
 }
 
+// Hiển thị danh sách tất cả người dùng
 void Admin::viewUsers() {
     std::ifstream inputFile("users.txt");
     if (inputFile) {
-        std::string fileUser, filePass;
+        std::string line;
         std::cout << "Danh sach nguoi dung:\n";
-        while (inputFile >> fileUser >> filePass) {
-            std::cout << "Ten nguoi dung: " << fileUser << std::endl;
+        while (std::getline(inputFile, line)) {
+            // Kiểm tra xem dòng có chứa thông tin người dùng không
+            if (line.find("Tên Đăng Nhập:") != std::string::npos) {
+                std::cout << line << std::endl; // In tên người dùng
+                // Đọc và in các thông tin khác liên quan đến người dùng
+                for (int i = 0; i < 5; ++i) { // Có 5 thông tin khác cần in
+                    std::getline(inputFile, line);
+                    std::cout << line << std::endl; // In các thông tin khác
+                }
+                std::cout << "------------------------" << std::endl; // Dấu phân cách giữa các người dùng
+            }
         }
     } else {
         std::cerr << "Khong the mo file de doc!" << std::endl;
     }
 }
 
+// Xóa một người dùng khỏi hệ thống
 void Admin::deleteUser(const std::string& username) {
     std::ifstream inputFile("users.txt");
     std::ofstream tempFile("temp.txt");
@@ -64,6 +76,7 @@ void Admin::deleteUser(const std::string& username) {
     }
 }
 
+// Quản lý danh sách phim (thêm/xóa/sửa/xem)
 void Admin::manageMovies() {
     int choice;
     do {
@@ -275,6 +288,7 @@ void Admin::updateMovie(const std::string& oldName, const std::string& newName) 
     }
 }
 
+// Quản lý người dùng (xem/xóa/theo dõi hoạt động)
 void Admin::manageUsers() {
     int choice;
     do {
@@ -317,6 +331,7 @@ void Admin::manageUsers() {
     } while (choice != 4);
 }
 
+// Xem hoạt động của một người dùng cụ thể
 void Admin::viewUserActivity(const std::string& username) {
     std::ifstream inputFile(username + "_history.txt"); // Lịch sử xem phim
     if (inputFile) {
