@@ -21,10 +21,22 @@ void User::registerUser() {
         std::cin.ignore();
         std::cout << "Nhap ten nguoi dung (toi thieu 3 ky tu): ";
         std::getline(std::cin, username);
+
         if (username.length() < 3) {
             std::cout << "Ten nguoi dung qua ngan! Vui long nhap lai.\n";
         }
     } while (username.length() < 3);
+
+    // Kiểm tra tên đăng nhập đã tồn tại
+    std::ifstream inputFile("users.txt");
+    std::string line;
+    while (std::getline(inputFile, line)) {
+        if (line.find("Ten Dang Nhap: " + username) != std::string::npos) {
+            std::cout << "Ten dang nhap da ton tai! Vui long chon ten khac.\n";
+            return; 
+        }
+    }
+    inputFile.close();
 
     // Nhập mật khẩu
     do {
