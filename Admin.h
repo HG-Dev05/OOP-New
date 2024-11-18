@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 #include "MovieManager.h" 
+#include <cstring>
+using namespace std;
 
 class Admin {
 private:
