@@ -18,4 +18,4 @@ public:
     void initializeViewCounts();
 };
 
-#endif // MOVIE_MANAGER_H
+#endif 

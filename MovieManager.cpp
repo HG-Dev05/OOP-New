@@ -2,43 +2,47 @@
 #include <fstream>
 #include <vector>
 #include <algorithm>
+#include <map>
+#include <iomanip>
 #include "MovieManager.h"
 
+using namespace std;
+
 // Thêm phim mới vào một thể loại
-void MovieManager::addMovie(const std::string& movieName, const std::string& genre) {
-    std::ofstream outputFile("Phim" + genre + ".txt", std::ios::app); // Tạo file cho thể loại
+void MovieManager::addMovie(const string& movieName, const string& genre) {
+    ofstream outputFile("Phim" + genre + ".txt", ios::app); 
     if (outputFile) {
-        outputFile << movieName << std::endl; // Ghi tên phim vào file thể loại
-        std::cout << "Da them phim: " << movieName << " vao the loai: " << genre << std::endl;
+        outputFile << movieName << endl; 
+        cout << "Da them phim: " << movieName << " vao the loai: " << genre << endl;
     } else {
-        std::cerr << "Khong the mo file de ghi!" << std::endl;
+        cerr << "Khong the mo file de ghi!" << endl;
     }
 }
 
 // Hiển thị danh sách phim theo thể loại
-void MovieManager::viewMoviesByGenre(const std::string& genre) {
-    std::ifstream movieFile("Phim" + genre + ".txt");
+void MovieManager::viewMoviesByGenre(const string& genre) {
+    ifstream movieFile("Phim" + genre + ".txt");
     if (movieFile) {
-        std::string line;
-        std::cout << "Phim trong the loai " << genre << ":\n";
-        while (std::getline(movieFile, line)) {
-            std::cout << "- " << line << std::endl; // In tên phim
+        string line;
+        cout << "Phim trong the loai " << genre << ":\n";
+        while (getline(movieFile, line)) {
+            cout << "- " << line << endl; // In tên phim
         }
     } else {
-        std::cerr << "Khong the mo file danh sach phim!" << std::endl;
+        cerr << "Khong the mo file danh sach phim!" << endl;
     }
 }
 
 // Lấy danh sách tất cả thể loại phim
-std::vector<std::string> MovieManager::getGenres() {
-    std::ifstream genreFile("TheLoaiPhim.txt");
-    std::vector<std::string> genres;
-    std::string line;
+vector<string> MovieManager::getGenres() {
+    ifstream genreFile("TheLoaiPhim.txt");
+    vector<string> genres;
+    string line;
 
     if (genreFile) {
-        while (std::getline(genreFile, line)) {
+        while (getline(genreFile, line)) {
             if (!line.empty()) {
-                genres.push_back(line); // Thêm thể loại vào danh sách
+                genres.push_back(line); 
             }
         }
     }
@@ -47,99 +51,135 @@ std::vector<std::string> MovieManager::getGenres() {
 
 // Hiển thị tất cả phim theo từng thể loại
 void MovieManager::viewAllMovies() {
-    std::ifstream genreFile("TheLoaiPhim.txt");
+    ifstream genreFile("TheLoaiPhim.txt");
     if (genreFile) {
-        std::string line;
-        while (std::getline(genreFile, line)) {
-            std::cout << "The loai: " << line << std::endl;
-            viewMoviesByGenre(line); // Gọi phương thức để in danh sách phim
+        string line;
+        vector<string> genres;
+        map<string, vector<string>> moviesByGenre;
+
+        // Đọc tất cả thể loại
+        while (getline(genreFile, line)) {
+            genres.push_back(line);
+            moviesByGenre[line] = getMoviesByGenre(line);
+        }
+
+        // Tìm số lượng phim tối đa trong một thể loại
+        size_t maxMovies = 0;
+        for (const auto& pair : moviesByGenre) {
+            maxMovies = max(maxMovies, pair.second.size());
+        }
+
+        // In header với thể loại
+        cout  << setw(20) << left << "The Loai";
+        for (size_t i = 0; i < genres.size(); i++) {
+            cout << "|" << setfill(' ') << setw(20) << left << genres[i];
+        }
+        cout << endl;
+
+        // In đường kẻ ngang
+        for (size_t i = 0; i <= genres.size(); i++) {
+            cout << setfill('-') << setw(20) << "" << "+";
+        }
+        cout << endl;
+
+        // In danh sách phim theo hàng
+        for (size_t i = 0; i < maxMovies; i++) {
+            cout << setfill(' ') << setw(20) << left << (i + 1);
+            for (const auto& genre : genres) {
+                cout << "|";
+                if (i < moviesByGenre[genre].size()) {
+                    cout << setw(20) << left << moviesByGenre[genre][i];
+                } else {
+                    cout << setw(20) << " ";
+                }
+            }
+            cout << endl;
         }
     } else {
-        std::cerr << "Khong the mo file danh sach the loai!" << std::endl;
+        cerr << "ERROR!" << endl;
     }
 }
 
 // Lấy danh sách phim của một thể loại
-std::vector<std::string> MovieManager::getMoviesByGenre(const std::string& genre) {
-    std::ifstream movieFile("Phim" + genre + ".txt");
-    std::vector<std::string> movies;
-    std::string line;
+vector<string> MovieManager::getMoviesByGenre(const string& genre) {
+    ifstream movieFile("Phim" + genre + ".txt");
+    vector<string> movies;
+    string line;
 
     if (movieFile) {
-        while (std::getline(movieFile, line)) {
-            movies.push_back(line); // Thêm tên phim vào danh sách
+        while (getline(movieFile, line)) {
+            movies.push_back(line); 
         }
     }
-    return movies; // Trả về danh sách phim
+    return movies; 
 }
 
 // Khởi tạo số lượt xem cho tất cả phim
 void MovieManager::initializeViewCounts() {
-    std::ifstream genreFile("TheLoaiPhim.txt");
-    std::ofstream viewCountFile("view_counts.txt");
+    ifstream genreFile("TheLoaiPhim.txt");
+    ofstream viewCountFile("view_counts.txt");
 
     if (genreFile && viewCountFile) {
-        std::string genre;
-        while (std::getline(genreFile, genre)) {
-            std::vector<std::string> movies = getMoviesByGenre(genre); // Lấy danh sách phim theo thể loại
+        string genre;
+        while (getline(genreFile, genre)) {
+            vector<string> movies = getMoviesByGenre(genre);
             for (const auto& movie : movies) {
-                viewCountFile << movie << ": 0" << std::endl; // Ghi tên phim và số lượt xem ban đầu là 0
+                viewCountFile << movie << ": 0" << endl; 
             }
         }
     } else {
-        std::cerr << "Khong the mo file de khoi tao!" << std::endl;
+        cerr << "Khong the mo file de khoi tao!" << endl;
     }
 }
 
-void MovieManager::deleteMovie(const std::string& movieName, const std::string& genre) {
-    std::ifstream inputFile("Phim" + genre + ".txt");
-    std::ofstream tempFile("temp.txt");
+void MovieManager::deleteMovie(const string& movieName, const string& genre) {
+    ifstream inputFile("Phim" + genre + ".txt");
+    ofstream tempFile("temp.txt");
     bool found = false;
 
     if (inputFile && tempFile) {
-        std::string line;
-        while (std::getline(inputFile, line)) {
+        string line;
+        while (getline(inputFile, line)) {
             if (line == movieName) {
-                found = true; // Đánh dấu là đã tìm thấy phim
-                std::cout << "Da xoa phim: " << movieName << " trong the loai: " << genre << std::endl;
-                continue; // Bỏ qua việc ghi vào file tạm
+                found = true;
+                cout << "Da xoa phim: " << movieName << " trong the loai: " << genre << endl;
+                continue; 
             }
-            tempFile << line << std::endl; // Ghi lại phim khác
+            tempFile << line << endl; 
         }
     } else {
-        std::cerr << "Khong the mo file de doc hoac ghi!" << std::endl;
+        cerr << "Khong the mo file de doc hoac ghi!" << endl;
     }
 
     inputFile.close();
     tempFile.close();
 
-    // Xóa file cũ và đổi tên file tạm thành file gốc
     remove(("Phim" + genre + ".txt").c_str());
     rename("temp.txt", ("Phim" + genre + ".txt").c_str());
 
     if (!found) {
-        std::cout << "Khong tim thay phim: " << movieName << " trong the loai: " << genre << std::endl;
+        cout << "Khong tim thay phim: " << movieName << " trong the loai: " << genre << endl;
     }
 }
 
-void MovieManager::updateMovie(const std::string& oldName, const std::string& newName, const std::string& genre) {
-    std::ifstream inputFile("Phim" + genre + ".txt");
-    std::ofstream tempFile("temp.txt");
+void MovieManager::updateMovie(const string& oldName, const string& newName, const string& genre) {
+    ifstream inputFile("Phim" + genre + ".txt");
+    ofstream tempFile("temp.txt");
     bool found = false;
 
     if (inputFile && tempFile) {
-        std::string line;
-        while (std::getline(inputFile, line)) {
+        string line;
+        while (getline(inputFile, line)) {
             if (line == oldName) {
-                found = true; // Đánh dấu là đã tìm thấy phim
-                tempFile << newName << std::endl; // Ghi tên phim mới
-                std::cout << "Da cap nhat phim: " << oldName << " thanh " << newName << std::endl;
+                found = true;
+                tempFile << newName << endl;
+                cout << "Da cap nhat phim: " << oldName << " thanh " << newName << endl;
             } else {
-                tempFile << line << std::endl; // Ghi lại phim khác
+                tempFile << line << endl;
             }
         }
     } else {
-        std::cerr << "Khong the mo file de doc hoac ghi!" << std::endl;
+        cerr << "Khong the mo file de doc hoac ghi!" << endl;
     }
 
     inputFile.close();
@@ -150,6 +190,6 @@ void MovieManager::updateMovie(const std::string& oldName, const std::string& ne
     rename("temp.txt", ("Phim" + genre + ".txt").c_str());
 
     if (!found) {
-        std::cout << "Khong tim thay phim: " << oldName << " trong the loai: " << genre << std::endl;
+        cout << "Khong tim thay phim: " << oldName << " trong the loai: " << genre << endl;
     }
 }

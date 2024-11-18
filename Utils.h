@@ -4,7 +4,7 @@
 #include <iostream>
 
 inline void drawBorder(int width) {
-    std::cout << std::string(width, '=') << std::endl; // Vẽ đường viền
+    std::cout << std::string(width, '=') << std::endl; 
 }
 
-#endif // UTILS_H
+#endif 

@@ -4,7 +4,7 @@
 #include <limits>
 #include <string>
 #include <vector>
-#include "MovieManager.h" // Thêm header cho MovieManager
+#include "MovieManager.h" 
 
 class User {
 private:
@@ -14,9 +14,8 @@ private:
     std::string phone;
     std::string address;
     std::string birthdate;
-    MovieManager movieManager; // Đối tượng MovieManager
+    MovieManager movieManager;
 
-    // Thêm các hàm kiểm tra tính hợp lệ
     bool isValidEmail(const std::string& email);
     bool isValidPhone(const std::string& phone);
     bool isValidBirthdate(const std::string& birthdate);
@@ -27,9 +26,9 @@ public:
     
     void registerUser();
     bool loginUser();
-    void viewMovies(); // Chỉ khai báo, không định nghĩa
+    void viewMovies(); 
     void viewWatchHistory();
     void clearWatchHistory();
 };
 
-#endif // USER_AUTH_H
+#endif 

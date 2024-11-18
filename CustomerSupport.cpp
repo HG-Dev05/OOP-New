@@ -1,5 +1,7 @@
 #include "CustomerSupport.h"
 
+using namespace std;
+
 // Constructor - Khởi tạo số lượt xem cho các phim
 CustomerSupport::CustomerSupport() {
     movieManager.initializeViewCounts();
@@ -7,87 +9,86 @@ CustomerSupport::CustomerSupport() {
 
 // Kiểm tra thông tin đăng nhập CSKH
 bool CustomerSupport::loginCustomerSupport() {
-    std::string username, password;
-    std::cout << "Nhap ten dang nhap: ";
-    std::cin >> username;
-    std::cout << "Nhap mat khau: ";
-    std::cin >> password;
+    string username, password;
+    cout << "Nhap ten dang nhap: ";
+    cin >> username;
+    cout << "Nhap mat khau: ";
+    cin >> password;
 
-    // Kiểm tra thông tin đăng nhập (giả định thông tin đăng nhập là đúng)
     return (username == "Bin" && password == "123");
 }
 
 // Đọc phản hồi của khách hàng theo thể loại và phim
 void CustomerSupport::readCustomerFeedback() {
-    MovieManager movieManager; // Tạo đối tượng MovieManager
+    MovieManager movieManager; 
 
     // Lấy và hiển thị danh sách thể loại
-    std::vector<std::string> genres = movieManager.getGenres(); // Sử dụng phương thức getGenres
+    vector<string> genres = movieManager.getGenres(); 
 
     // Hiển thị danh sách thể loại
-    std::cout << "Danh sach the loai phim:\n";
+    cout << "Danh sach the loai phim:\n";
     for (size_t i = 0; i < genres.size(); ++i) {
-        std::cout << i + 1 << ". " << genres[i] << std::endl;
+        cout << i + 1 << ". " << genres[i] << endl;
     }
 
     // Cho phép chọn thể loại và phim để xem phản hồi
     int genreChoice;
-    std::cout << "Chon the loai phim (nhap so): ";
-    std::cin >> genreChoice;
+    cout << "Chon the loai phim (nhap so): ";
+    cin >> genreChoice;
 
     if (genreChoice > 0 && genreChoice <= genres.size()) {
-        std::string selectedGenre = genres[genreChoice - 1];
-        std::cout << "Ban da chon the loai: " << selectedGenre << std::endl;
+        string selectedGenre = genres[genreChoice - 1];
+        cout << "Ban da chon the loai: " << selectedGenre << endl;
 
         // Đọc danh sách phim theo thể loại từ MovieManager
-        std::vector<std::string> movies = movieManager.getMoviesByGenre(selectedGenre); // Sử dụng phương thức getMoviesByGenre
+        vector<string> movies = movieManager.getMoviesByGenre(selectedGenre); 
 
         // Hiển thị danh sách phim theo thể loại
-        std::cout << "Danh sach phim trong the loai " << selectedGenre << ":\n";
+        cout << "Danh sach phim trong the loai " << selectedGenre << ":\n";
         for (size_t i = 0; i < movies.size(); ++i) {
-            std::cout << i + 1 << ". " << movies[i] << std::endl;
+            cout << i + 1 << ". " << movies[i] << endl;
         }
 
         // Cho phép người dùng chọn phim
         int movieChoice;
-        std::cout << "Chon phim de xem phan hoi (nhap so): ";
-        std::cin >> movieChoice;
+        cout << "Chon phim de xem phan hoi (nhap so): ";
+        cin >> movieChoice;
 
         if (movieChoice > 0 && movieChoice <= movies.size()) {
-            std::string selectedMovie = movies[movieChoice - 1];
-            std::ifstream feedbackFile(selectedMovie + "_feedback.txt");
+            string selectedMovie = movies[movieChoice - 1];
+            ifstream feedbackFile(selectedMovie + "_feedback.txt");
             if (feedbackFile) {
-                std::string line;
-                std::cout << "Danh sach phan hoi cho phim " << selectedMovie << ":\n";
-                bool hasFeedback = false; // Biến kiểm tra có bình luận hay không
-                while (std::getline(feedbackFile, line)) {
-                    std::cout << "- " << line << std::endl; // In ra từng bình luận
+                string line;
+                cout << "Danh sach phan hoi cho phim " << selectedMovie << ":\n";
+                bool hasFeedback = false; 
+                while (getline(feedbackFile, line)) {
+                    cout << "- " << line << endl; // In ra từng bình luận
                     hasFeedback = true; // Đã có bình luận
                 }
                 if (!hasFeedback) {
-                    std::cout << "Phim " << selectedMovie << " chua co binh luan nao!" << std::endl; // Thông báo nếu không có bình luận
+                    cout << "Phim " << selectedMovie << " chua co binh luan nao!" << endl;
                 }
             } else {
-                std::cerr << "Khong the mo file phan hoi cho phim " << selectedMovie << "!" << std::endl;
+                cerr << "Khong the mo file phan hoi cho phim " << selectedMovie << "!" << endl;
             }
         } else {
-            std::cout << "Lua chon khong hop le!" << std::endl;
+            cout << "Lua chon khong hop le!" << endl;
         }
     } else {
-        std::cout << "Lua chon khong hop le!" << std::endl;
+        cout << "Lua chon khong hop le!" << endl;
     }
 }
 
 // Thống kê số lượt xem của các phim
 void CustomerSupport::statistics() {
-    std::ifstream viewCountFile("view_counts.txt");
+    ifstream viewCountFile("view_counts.txt");
     if (viewCountFile) {
-        std::string line;
-        std::cout << "Thong ke so luot xem cho tung phim:\n";
-        while (std::getline(viewCountFile, line)) {
-            std::cout << line << std::endl; // In ra số lượt xem cho từng phim
+        string line;
+        cout << "Thong ke so luot xem cho tung phim:\n";
+        while (getline(viewCountFile, line)) {
+            cout << line << endl; 
         }
     } else {
-        std::cerr << "Khong the mo file thong ke so luot xem!" << std::endl;
+        cerr << "Khong the mo file thong ke so luot xem!" << endl;
     }
 }

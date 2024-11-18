@@ -18,4 +18,4 @@ private:
     MovieManager movieManager;
 };
 
-#endif // CUSTOMERSUPPORT_H
+#endif

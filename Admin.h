@@ -3,24 +3,24 @@
 
 #include <string>
 #include <vector>
-#include "MovieManager.h" // Thêm header cho MovieManager
+#include "MovieManager.h" 
 
 class Admin {
 private:
-    const std::string adminUsername = "admin"; // Ten dang nhap admin
-    const std::string adminPassword = "admin123"; // Mat khau admin
-    MovieManager movieManager; // Đối tượng MovieManager
+    const string adminUsername = "admin"; 
+    const string adminPassword = "admin123"; 
+    MovieManager movieManager; 
 
 public:
     bool loginAdmin();
     void viewUsers();
-    void deleteUser(const std::string& username);
+    void deleteUser(const string& username);
     void manageMovies();
-    void addMovie(const std::string& movieName);
-    void deleteMovie(const std::string& movieName);
-    void updateMovie(const std::string& oldName, const std::string& newName);
-    void manageUsers(); // Khai báo phương thức quản lý người dùng
-    void viewUserActivity(const std::string& username); // Khai báo phương thức xem hoạt động của người dùng
+    void addMovie(const string& movieName);
+    void deleteMovie(const string& movieName);
+    void updateMovie(const string& oldName, const string& newName);
+    void manageUsers(); 
+    void viewUserActivity(const string& username); 
 };
 
-#endif // ADMIN_H
+#endif 

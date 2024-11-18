@@ -1,81 +1,82 @@
 #include <iostream>
-#include "UserAuth.h" // Thêm header cho User
-#include "Admin.h" // Thêm header cho Admin
-#include "MovieManager.h" // Thêm header cho MovieManager
-#include "CustomerSupport.h" // Thêm header cho CustomerSupport
+#include "UserAuth.h" 
+#include "Admin.h" 
+#include "MovieManager.h" 
+#include "CustomerSupport.h" 
 #include <string>
 #include "Utils.h" 
 #include <limits>
 
-// Hiển thị menu chính của chương trình
+using namespace std;
+
 void displayMainMenu() {
-    int width = 40; // Chiều rộng của menu
+    int width = 40; 
     drawBorder(width);
-    std::cout << "**    CHUONG TRINH QUAN LY PHIM       **\n";
+    cout << "**    CHUONG TRINH QUAN LY PHIM       **\n";
     drawBorder(width);
-    std::cout << "**            *MENU*                **\n";
+    cout << "**            *MENU*                **\n";
     drawBorder(width);
-    std::cout << "** 1. Dang ky                         **\n";
-    std::cout << "** 2. Dang nhap                       **\n";
-    std::cout << "** 3. Dang nhap Admin                 **\n";
-    std::cout << "** 4. Cham soc khach hang             **\n";
-    std::cout << "** 5. Thoat                           **\n";
+    cout << "** 1. Dang ky                         **\n";
+    cout << "** 2. Dang nhap                       **\n";
+    cout << "** 3. Dang nhap Admin                 **\n";
+    cout << "** 4. Cham soc khach hang             **\n";
+    cout << "** 5. Thoat                           **\n";
     drawBorder(width);
-    std::cout << "Nhap tuy chon: ";
+    cout << "Nhap tuy chon: ";
 }
 
 // Hiển thị menu chức năng cho người dùng đã đăng nhập
 void displayUserMenu() {
-    int width = 40; // Chiều rộng của menu
+    int width = 40; 
     drawBorder(width);
-    std::cout << "**             MENU NGUOI DUNG       **\n";
+    cout << "**             MENU NGUOI DUNG       **\n";
     drawBorder(width);
-    std::cout << "** 1. Xem phim                        **\n";
-    std::cout << "** 2. Xem lich su phim da xem         **\n";
-    std::cout << "** 3. Xoa lich su xem phim            **\n";
-    std::cout << "** 4. Thoat                           **\n";
+    cout << "** 1. Xem phim                        **\n";
+    cout << "** 2. Xem lich su phim da xem         **\n";
+    cout << "** 3. Xoa lich su xem phim            **\n";
+    cout << "** 4. Thoat                           **\n";
     drawBorder(width);
-    std::cout << "Nhap tuy chon: ";
+    cout << "Nhap tuy chon: ";
 }
 
 // Hiển thị menu quản lý cho admin
 void displayAdminMenu() {
-    int width = 40; // Chiều rộng của menu
+    int width = 40; 
     drawBorder(width);
-    std::cout << "**            MENU QUAN LY ADMIN     **\n";
+    cout << "**            MENU QUAN LY ADMIN      **\n";
     drawBorder(width);
-    std::cout << "** 1. Quan ly nguoi dung              **\n";
-    std::cout << "** 2. Quan ly phim                    **\n";
-    std::cout << "** 3. Thoat                          **\n";
+    cout << "** 1. Quan ly nguoi dung              **\n";
+    cout << "** 2. Quan ly phim                    **\n";
+    cout << "** 3. Thoat                           **\n";
     drawBorder(width);
-    std::cout << "Nhap tuy chon: ";
+    cout << "Nhap tuy chon: ";
 }
 
 // Hiển thị menu chức năng chăm sóc khách hàng
 void displayCustomerSupportMenu() {
-    int width = 40; // Chiều rộng của menu
+    int width = 40; 
     drawBorder(width);
-    std::cout << "**        MENU CHAM SOC KHACH HANG    **\n";
+    cout << "**        MENU CHAM SOC KHACH HANG    **\n";
     drawBorder(width);
-    std::cout << "** 1. Doc phan hoi khach hang          **\n";
-    std::cout << "** 2. Thong ke the loai phim           **\n";
-    std::cout << "** 3. Thoat                            **\n";
+    cout << "** 1. Doc phan hoi khach hang          **\n";
+    cout << "** 2. Thong ke the loai phim           **\n";
+    cout << "** 3. Thoat                            **\n";
     drawBorder(width);
-    std::cout << "Nhap tuy chon: ";
+    cout << "Nhap tuy chon: ";
 }
 
 int main() {
     int choice;
-    User user("", ""); // Khoi tao doi tuong User
-    Admin admin; // Khoi tao doi tuong Admin
-    CustomerSupport customerSupport; // Khoi tao doi tuong CustomerSupport
+    User user("", ""); 
+    Admin admin;
+    CustomerSupport customerSupport; 
 
     do {
-        displayMainMenu(); // Hiển thị menu chính
+        displayMainMenu(); 
         do {
-            std::cin >> choice;
+            cin >> choice;
             if (choice < 1 || choice > 5) {
-                std::cout << "Lua chon khong hop le! Vui long chon lai (1-5): ";
+                cout << "Lua chon khong hop le! Vui long chon lai (1-5): ";
             }
         } while (choice < 1 || choice > 5);
 
@@ -87,8 +88,8 @@ int main() {
                 if (user.loginUser()) {
                     int userChoice;
                     do {
-                        displayUserMenu(); // Hiển thị menu người dùng
-                        std::cin >> userChoice;
+                        displayUserMenu(); 
+                        cin >> userChoice;
 
                         switch (userChoice) {
                             case 1:
@@ -101,22 +102,22 @@ int main() {
                                 user.clearWatchHistory();
                                 break;
                             case 4:
-                                std::cout << "Thoat chuc nang nguoi dung." << std::endl;
+                                cout << "Thoat chuc nang nguoi dung." << endl;
                                 break;
                             default:
-                                std::cout << "Lua chon khong hop le! Vui long chon lai." << std::endl;
+                                cout << "Lua chon khong hop le! Vui long chon lai." << endl;
                         }
                     } while (userChoice != 4);
                 } else {
-                    std::cout << "Dang nhap khong thanh cong!" << std::endl;
+                    cout << "Dang nhap khong thanh cong!" << endl;
                 }
                 break;
             case 3:
                 if (admin.loginAdmin()) {
                     int adminChoice;
                     do {
-                        displayAdminMenu(); // Hiển thị menu quản lý admin
-                        std::cin >> adminChoice;
+                        displayAdminMenu(); 
+                        cin >> adminChoice;
 
                         switch (adminChoice) {
                             case 1:
@@ -126,22 +127,22 @@ int main() {
                                 admin.manageMovies();
                                 break;
                             case 3:
-                                std::cout << "Thoat chuc nang quan ly admin." << std::endl;
+                                cout << "Thoat chuc nang quan ly admin." << endl;
                                 break;
                             default:
-                                std::cout << "Lua chon khong hop le! Vui long chon lai." << std::endl;
+                                cout << "Lua chon khong hop le! Vui long chon lai." << endl;
                         }
                     } while (adminChoice != 3);
                 } else {
-                    std::cout << "Dang nhap admin khong thanh cong!" << std::endl;
+                    cout << "Dang nhap admin khong thanh cong!" << endl;
                 }
                 break;
             case 4:
                 if (customerSupport.loginCustomerSupport()) {
                     int supportChoice;
                     do {
-                        displayCustomerSupportMenu(); // Hiển thị menu chăm sóc khách hàng
-                        std::cin >> supportChoice;
+                        displayCustomerSupportMenu();
+                        cin >> supportChoice;
 
                         switch (supportChoice) {
                             case 1:
@@ -151,27 +152,27 @@ int main() {
                                 customerSupport.statistics();
                                 break;
                             case 3:
-                                std::cout << "Thoat chuc nang cham soc khach hang." << std::endl;
+                                cout << "Thoat chuc nang cham soc khach hang." << endl;
                                 break;
                             default:
-                                std::cout << "Lua chon khong hop le! Vui long chon lai." << std::endl;
+                                cout << "Lua chon khong hop le! Vui long chon lai." << endl;
                         }
                     } while (supportChoice != 3);
                 } else {
-                    std::cout << "Dang nhap cham soc khach hang khong thanh cong!" << std::endl;
+                    cout << "Dang nhap cham soc khach hang khong thanh cong!" << endl;
                 }
                 break;
             case 5:
-                std::cout << "Thoat chuong trinh." << std::endl;
+                cout << "Thoat chuong trinh." << endl;
                 break;
             default:
-                std::cout << "Lua chon khong hop le! Vui long chon lai." << std::endl;
+                cout << "Lua chon khong hop le! Vui long chon lai." << endl;
         }
 
-        if (choice != 5) {  // Không đợi Enter khi thoát chương trình
-            std::cout << "\nNhan Enter de tiep tuc...";
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cin.get();
+        if (choice != 5) { 
+            cout << "\nNhan Enter de tiep tuc...";
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cin.get();
         }
     } while (choice != 5);
 
