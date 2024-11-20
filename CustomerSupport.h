@@ -7,6 +7,8 @@
 #include <fstream>
 #include "MovieManager.h"
 
+using namespace std;
+
 class CustomerSupport {
 public:
     CustomerSupport();

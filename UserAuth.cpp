@@ -24,18 +24,25 @@ void User::registerUser() {
         if (username.length() < 3) {
             cout << "Ten nguoi dung qua ngan! Vui long nhap lai.\n";
         }
+        // Kiểm tra tên đăng nhập đã tồn tại
+        else{
+            ifstream inputFile("users.txt");
+            string line;
+            bool check = false;
+            while (getline(inputFile, line)) {
+                if (line.find("Ten Dang Nhap: " + username) != string::npos) {
+                    check = true;
+                    break;
+                }
+            }
+            inputFile.close();
+            if (check) {
+                cout << "Ten dang nhap da ton tai! Vui long chon ten khac.\n";
+            }
+        }
     } while (username.length() < 3);
 
-    // Kiểm tra tên đăng nhập đã tồn tại
-    ifstream inputFile("users.txt");
-    string line;
-    while (getline(inputFile, line)) {
-        if (line.find("Ten Dang Nhap: " + username) != string::npos) {
-            cout << "Ten dang nhap da ton tai! Vui long chon ten khac.\n";
-            return; 
-        }
-    }
-    inputFile.close();
+    
 
     // Nhập mật khẩu
     do {
@@ -114,6 +121,7 @@ bool User::loginUser() {
             if (line.find("Ten Dang Nhap: " + inputUser) != string::npos) {
                 getline(inputFile, line); 
                 if (line == "Mat Khau: " + inputPass) {
+                    // Đọc các dòng tiếp theo để lấy thông tin khác
                     getline(inputFile, line);
                     getline(inputFile, line);
                     getline(inputFile, line);
@@ -200,7 +208,7 @@ void User::viewMovies() {
             cout << "==============================\n";
             cout << "     DANG XEM PHIM: " << selectedMovie << "     \n";
             cout << "==============================\n";
-            cout << "        Chuc Ban Xem Phim Vui Ve!        \n";
+            cout << "     Chuc Ban Xem Phim Vui Ve!        \n";
             cout << "==============================\n";
             // Cập nhật số lượt xem cho phim được chọn
             ifstream viewCountFile("view_counts.txt");

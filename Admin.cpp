@@ -46,29 +46,39 @@ void Admin::deleteUser(const string& username) {
     ifstream inputFile("users.txt");
     ofstream tempFile("temp.txt");
     bool found = false;
+    string line;
 
     if (inputFile && tempFile) {
-        string fileUser, filePass;
-        while (inputFile >> fileUser >> filePass) {
-            if (fileUser == username) {
+        while (getline(inputFile, line)) {
+            if (line == "Ten Dang Nhap: " + username) {
                 found = true;
-                cout << "Da xoa nguoi dung: " << username << endl;
+                // Bỏ qua 6 dòng thông tin của user (bao gồm cả dòng phân cách)
+                for (int i = 0; i < 6; i++) {
+                    getline(inputFile, line);
+                }
                 continue;
             }
-            tempFile << fileUser << " " << filePass << endl;
+            tempFile << line << endl;
+        }
+
+        inputFile.close();
+        tempFile.close();
+
+        if (found) {
+            remove("users.txt");
+            rename("temp.txt", "users.txt");
+            
+            // Xóa các file liên quan đến user
+            remove((username + "_history.txt").c_str());
+            remove((username + "_feedback.txt").c_str());
+            
+            cout << "Da xoa nguoi dung: " << username << endl;
+        } else {
+            remove("temp.txt");
+            cout << "Khong tim thay nguoi dung: " << username << endl;
         }
     } else {
         cerr << "Khong the mo file de doc hoac ghi!" << endl;
-    }
-
-    inputFile.close();
-    tempFile.close();
-
-    remove("users.txt");
-    rename("temp.txt", "users.txt");
-
-    if (!found) {
-        cout << "Khong tim thay nguoi dung: " << username << endl;
     }
 }
 

@@ -14,7 +14,7 @@ void displayMainMenu() {
     drawBorder(width);
     cout << "**    CHUONG TRINH QUAN LY PHIM       **\n";
     drawBorder(width);
-    cout << "**            *MENU*                **\n";
+    cout << "**              *MENU*                **\n";
     drawBorder(width);
     cout << "** 1. Dang ky                         **\n";
     cout << "** 2. Dang nhap                       **\n";

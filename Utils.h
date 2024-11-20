@@ -2,9 +2,12 @@
 #define UTILS_H
 
 #include <iostream>
+#include <string>
+
+using namespace std;
 
 inline void drawBorder(int width) {
-    std::cout << std::string(width, '=') << std::endl; 
+    cout << string(width, '=') << endl; 
 }
 
 #endif 

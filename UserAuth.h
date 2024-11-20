@@ -8,21 +8,21 @@
 
 class User {
 private:
-    std::string username;
-    std::string password;
-    std::string email;
-    std::string phone;
-    std::string address;
-    std::string birthdate;
+    string username;
+    string password;
+    string email;
+    string phone;
+    string address;
+    string birthdate;
     MovieManager movieManager;
 
-    bool isValidEmail(const std::string& email);
-    bool isValidPhone(const std::string& phone);
-    bool isValidBirthdate(const std::string& birthdate);
+    bool isValidEmail(const string& email);
+    bool isValidPhone(const string& phone);
+    bool isValidBirthdate(const string& birthdate);
     void clearInputBuffer();
     
 public:
-    User(std::string user, std::string pass);
+    User(string user, string pass);
     
     void registerUser();
     bool loginUser();

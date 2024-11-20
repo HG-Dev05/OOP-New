@@ -4,16 +4,18 @@
 #include <string>
 #include <vector>
 
+using namespace std;
+
 class MovieManager {
 public:
-    void addMovie(const std::string& movieName, const std::string& genre);
-    void deleteMovie(const std::string& movieName, const std::string& genre); 
-    void updateMovie(const std::string& oldName, const std::string& newName, const std::string& genre);
+    void addMovie(const string& movieName, const string& genre);
+    void deleteMovie(const string& movieName, const string& genre); 
+    void updateMovie(const string& oldName, const string& newName, const string& genre);
 
-    void viewMoviesByGenre(const std::string& genre);
-    std::vector<std::string> getGenres();
+    void viewMoviesByGenre(const string& genre);
+    vector<string> getGenres();
     void viewAllMovies();
-    std::vector<std::string> getMoviesByGenre(const std::string& genre);
+    vector<string> getMoviesByGenre(const string& genre);
 
     void initializeViewCounts();
 };
